@@ -1,0 +1,9 @@
+{
+    "name": "com.osk.singletonregistry",
+    "version": "1.0.0",
+    "displayName": "OSK-SingletonRegistry",
+    "description": "Singleton system does not need inheritance, just mark the class with [GlobalSingleton] or [SceneSingleton]",
+    "author": "QuyLe", 
+    "unity": "2022.3",
+    "hideInEditor": false
+} 
