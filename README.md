@@ -1,6 +1,6 @@
-# **OSK Singleton System**
+# **OSK Singleton Registry**
 
-The **OSK Singleton System** is a lightweight, attribute-based singleton framework for Unity. It allows you to define global or scene-specific singletons without inheriting any base class.
+The **OSK Singleton Registry** is a lightweight, attribute-based singleton framework for Unity. It allows you to define global or scene-specific singletons without inheriting any base class.
 
 **Version 1.0**
 
@@ -33,7 +33,7 @@ Install lin git in PackageManager Unity:
 [GlobalSingleton]
 public class ExampleGlobalSingleton : MonoBehaviour
 {
-    public static ExampleGlobalSingleton Instance => SingletonRegistry.Get<ExampleGlobalSingleton>();
+    public static ExampleGlobalSingleton Instance => SingletonRegistry.RegisterOrGet<ExampleGlobalSingleton>();
 
     public void Call() => Debug.Log("[ExampleGlobalSingleton] Call");
 
@@ -51,9 +51,14 @@ Or restrict to specific scenes:
 [SceneSingleton("MainMenu", "Gameplay")]
 public class ExampleSceneSingleton : MonoBehaviour
 {
-    public static ExampleSceneSingleton Instance => SingletonRegistry.Get<ExampleSceneSingleton>();
+    public static ExampleSceneSingleton Instance => SingletonRegistry.RegisterOrGet<ExampleSceneSingleton>();
 
     public void Call() => Debug.Log("[ExampleSceneSingleton] Call");
+    
+    private void OnDisable()
+    {
+        SingletonRegistry.Clear<ExampleSceneSingleton>();
+    }
 
     // ==========================
     // 🧩 Usage Example

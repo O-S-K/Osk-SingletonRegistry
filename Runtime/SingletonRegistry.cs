@@ -11,7 +11,7 @@ namespace OSK
     {
         private static readonly Dictionary<Type, MonoBehaviour> k_Instances = new Dictionary<Type, MonoBehaviour>();
 
-        public static T Get<T>() where T : MonoBehaviour
+        public static T RegisterOrGet<T>() where T : MonoBehaviour
         {
             Type type = typeof(T);
 
@@ -50,10 +50,10 @@ namespace OSK
             }
             else if (type.GetCustomAttribute<SceneSingletonAttribute>() is SceneSingletonAttribute sceneAttr)
             {
-                string currentScene = SceneManager.GetActiveScene().name;
-                if (sceneAttr.AllowedScenes != null && sceneAttr.AllowedScenes.Length > 0)
+                var currentScene = SceneManager.GetActiveScene().name;
+                if (sceneAttr.AllowedScenes is { Length: > 0 })
                 {
-                    if (!System.Linq.Enumerable.Contains(sceneAttr.AllowedScenes, currentScene))
+                    if (!sceneAttr.AllowedScenes.Contains(currentScene))
                     {
                         Debug.LogError(
                             $"[SingletonRegistry] SceneSingleton {type.Name} is not allowed in scene '{currentScene}'. " +
@@ -69,7 +69,26 @@ namespace OSK
             }
         }
         
-        public static void ClearSceneSingletons<T>() where T : MonoBehaviour
+        public static void UnRegister<T>() where T : MonoBehaviour
+        {
+            var type = typeof(T);
+            if (k_Instances.TryGetValue(type, out var instance))
+            {
+                Debug.Log($"[SingletonRegistry] Unregistered Singleton: {type.Name}");
+
+                if (instance.gameObject)
+                {
+                    UnityEngine.Object.Destroy(instance.gameObject);
+                }
+                k_Instances.Remove(type);
+            }
+            else
+            {
+                Debug.LogWarning($"[SingletonRegistry] No Singleton of type {type.Name} found to unregister.");
+            }
+        }
+        
+        public static void Clear<T>() where T : MonoBehaviour
         {
             var type = typeof(T);
             if (k_Instances.ContainsKey(type))
@@ -83,7 +102,7 @@ namespace OSK
             }
         }
 
-        public static void ClearSceneSingletons()
+        public static void ClearAll()
         {
             var removeList = (from kv in k_Instances where kv.Key.GetCustomAttribute<GlobalSingletonAttribute>() == null select kv.Key).ToList();
             foreach (var t in removeList)
