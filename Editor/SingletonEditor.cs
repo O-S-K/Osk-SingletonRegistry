@@ -17,10 +17,10 @@ namespace OSK
                 .Where(t => t.IsClass && !t.IsAbstract && typeof(MonoBehaviour).IsAssignableFrom(t))
                 .Where(t => t.GetCustomAttribute<GlobalSingletonAttribute>() != null);
 
-            Logg.Log("[SingletonScanner] Found GlobalSingleton Classes:");
+            Debug.Log("[SingletonScanner] Found GlobalSingleton Classes:");
             foreach (var type in types)
             {
-                Logg.Log(" - " + type.FullName);
+                Debug.Log(" - " + type.FullName);
             }
         }
 
@@ -32,14 +32,14 @@ namespace OSK
                 .Where(t => t.IsClass && !t.IsAbstract && typeof(MonoBehaviour).IsAssignableFrom(t))
                 .Where(t => t.GetCustomAttribute<SceneSingletonAttribute>() != null);
 
-            Logg.Log("[SingletonScanner] Found SceneSingleton Classes:");
+            Debug.Log("[SingletonScanner] Found SceneSingleton Classes:");
             foreach (var type in types)
             {
                 var attr = type.GetCustomAttribute<SceneSingletonAttribute>();
                 string scenes = (attr.AllowedScenes != null && attr.AllowedScenes.Length > 0)
                     ? string.Join(", ", attr.AllowedScenes)
                     : "(All Scenes)";
-                Logg.Log($" - {type.FullName} | Allowed Scenes: {scenes}");
+                Debug.Log($" - {type.FullName} | Allowed Scenes: {scenes}");
             }
         }
 
@@ -49,7 +49,7 @@ namespace OSK
             Debug.Log($"[SingletonRegistry] Total: {SingletonRegistry.Count}");
             foreach (var type in SingletonRegistry.AllTypes())
             {
-                Logg.Log($" - {type.Name}");
+                Debug.Log($" - {type.Name}");
             }
         }
     }

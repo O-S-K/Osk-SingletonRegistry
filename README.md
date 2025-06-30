@@ -19,11 +19,9 @@ The **OSK Singleton System** is a lightweight, attribute-based singleton framewo
 
 ## **📦 Installation**
 
-Simply copy the following files into your Unity project:
+Install lin git in PackageManager Unity:
 
-- `Attributes/SingletonAttributes.cs`
-- `Core/SingletonRegistry.cs`
-- `Editor/SingletonScanner.cs`
+- https://github.com/O-S-K/Osk-SingletonRegistry.git
 
 ---
 
